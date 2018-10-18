@@ -1,0 +1,25 @@
+{
+	"builders": [
+		{
+			"profile": "",
+			"type": "amazon-ebs",
+			"region": "us-east-2",
+			"source_ami": "ami-caaf84af",
+			"instance_type": "t2.micro",
+			"ssh_username": "ec2-user",
+			"ami_name": "Hello World {{timestamp}}"
+		}
+	],
+	"provisioners": [
+		{
+			"type": "shell",
+			"inline": [
+				"sudo yum update -y",
+				"sudo yum install --enablerepo=epel -y nodejs",
+				"sudo wget https://raw.githubusercontent.com/mquinndev/aws-ansible/master/helloworld.js -O /home/ec2-user/helloworld.js",
+				"sudo wget https://raw.githubusercontent.com/mquinndev/aws-ansible/master/helloworld.conf -O /etc/init/helloworld.conf",
+				"sudo start helloworld"
+			]
+		}
+	]
+}
