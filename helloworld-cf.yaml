@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: A simple Hello World Web App
+
+Resources:
+  HelloWorldSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: "HelloWorld"
+      GroupDescription: "Hello World security group"
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          CidrIp: 0.0.0.0/0
+
+  HelloWorldEC2Instance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: "ami-0c1a68093b6298005"
+      InstanceType: t2.micro
+      KeyName: "default-key-pair"
+      SecurityGroups:
+        - !Ref "HelloWorldSecurityGroup"
+      Tags:
+        - Key: "Name"
+          Value: "Hello World"
+
+Outputs:
+  HelloWorldIP:
+    Description: "Public IP of our instance"
+    Value: !GetAtt HelloWorldEC2Instance.PublicIp
+  HelloWorldDnsName:
+    Description: "DNS Name of our instance"
+    Value: !GetAtt HelloWorldEC2Instance.PublicDnsName
